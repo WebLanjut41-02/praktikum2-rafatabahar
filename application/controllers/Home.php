@@ -5,11 +5,12 @@ class Home extends MY_Controller{
 
   public function __construct(){
     parent::__construct();
+    $this->load->model('PaketModel');
   }
 
   function index(){
-    
-    $data['data_paket'] = $result;
+
+    $data['data_paket'] = $this->PaketModel->get_all_data();
     $this->load->view('home',$data);
   }
 
@@ -26,7 +27,7 @@ class Home extends MY_Controller{
     $inputData['tanggal_datang'] = date('Y-m-d');
     $inputData['tanggal_ambil'] = "NULL";
 
-    $this->db->insert('paket', $inputData);
+    $this->PaketModel->save_data($inputData);
 
     redirect(base_url()."Home");
 
@@ -34,8 +35,8 @@ class Home extends MY_Controller{
 
   public function update_paket($id_paket){
     $updateData['tanggal_ambil'] = date('Y-m-d');
-    $this->db->where('id_paket', $id_paket);
-    if ($this->db->update('paket', $updateData)) {
+
+    if ($this->PaketModel->update_data($id_paket,$updateData)) {
       redirect(base_url()."Home");
     }else {
       echo "gagal update";
